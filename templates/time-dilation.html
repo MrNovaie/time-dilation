@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A website that aims to use Minkowski diagrams to visually show time dilation in effect." />
+    <title>Time Dilation</title>
+    <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=DM+Serif+Text:ital@0;1&family=Fjalla+One&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Share+Tech&family=Yanone+Kaffeesatz:wght@200..700&display=swap" rel="stylesheet">
+    <!--Icon-->
+    <link rel="icon" type="image/png" href="../static/img/rocket-icon.png" sizes="any" />
+    <!--CSS-->
+    <link rel="stylesheet" href="../static/time-dilation-SideBottomBars.css" />
+    <link rel="stylesheet" href="../static/time-dilation-GridsAndPaths.css" />
+    <link rel="stylesheet" href="../static/time-dilation-RocketsNRoses.css" />
+    <link rel="stylesheet" href="../static/time-dilation-Media.css" />
+    <link rel="stylesheet" href="../static/time-dilation-Fonts.css" />
+    <!--JavaScript-->
+    <script src="../static/time-dilation.js" defer></script>
+    <script src="../static/time-dilation-graph.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="sidebar" id="navbar">
+            <a href="javascript:void(0)" class="closebtn">&times;</a>
+            <a href="https://star-classification.netlify.app/">Home</a>
+            <a href="https://star-classification.netlify.app/star-classes/">Star Classification</a>
+            <a href="https://time-dilation.netlify.app/">Time Dilation</a>
+        </div>
+        <div class="control-panel">
+            <div class="panel-1">
+                <h1 class="panel-title panel-primary josefin-sans-700">Control Panel</h1>
+                <button type="button" class="openbtn">☰ Open Sidebar</button>
+                <div class="play-pause-button">
+                    <button type="button" class="play-pause-btn" aria-pressed="false">Start</button>
+                    <button type="button" class="reset-btn">End</button>
+                </div>
+            </div>
+            <div class="panel-2">
+                <p class="accel-row"><span class="control-label">Acceleration:</span> <button type="button" class="linear accel-btn" data-mode="linear" onclick="acceleration(event, 'linear')" aria-pressed="true">Linear</button><button type="button" class="instant accel-btn" data-mode="instant" onclick="acceleration(event, 'instant')" aria-pressed="false">Instant</button></p>
+                <label for="speed" class="control-label">Speed:</label>
+                <div class="speed-control">
+                    <input type="range" class="speed" name="speed" id="speed" min="0" max="10" value="0"/>
+                    <div class="speed-labels">
+                        <span>0c</span>
+                        <span>0.5c</span>
+                        <span>1.0c</span>
+                    </div>
+                </div>
+                <p class="path-row"> <!--PATH represents the path of the rocket, either unidirectional or bidirectional-->
+                    <span class="control-label">Path:</span>
+                    <button type="button" class="accel-btn path-btn" data-path="uni" aria-pressed="true">Unidirectional</button>
+                    <button type="button" class="accel-btn path-btn" data-path="bi" aria-pressed="false">Bidirectional</button>
+                </p>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="rocket-div">
+            <div class="line-length-row" id="lineLengthRow">
+                <span class="line-length-cap" aria-hidden="true">|</span>
+                <span class="line-length-arm" aria-hidden="true"></span>
+                <p class="path-length-text" id="pathLengthText">2 light-years</p>
+                <span class="line-length-arm" aria-hidden="true"></span>
+                <span class="line-length-cap" aria-hidden="true">|</span>
+            </div>
+            <div class="rocket-stage">
+                <div class="rocket-portal" aria-hidden="true"></div>
+                <div class="rocket-track" id="rocketTrack">
+                    <svg class="rocket-ship" id="rocketShip" viewBox="0 0 78 40" width="78" height="40" aria-hidden="true">
+                        <path fill="#7eb8d6" stroke="rgba(140, 220, 255, 0.95)" stroke-width="1.25" d="M44 11 L22 11 L14 20 L22 29 L44 29 Z"/>
+                        <path fill="#c8f3ff" stroke="rgba(140, 220, 255, 0.95)" stroke-width="1.25" d="M44 11 L62 20 L44 29 Z"/>
+                        <circle cx="32" cy="20" r="5" fill="rgba(25, 45, 70, 0.65)" stroke="rgba(140, 220, 255, 0.8)" stroke-width="1"/>
+                        <path fill="#e84a2e" d="M14 20 L6 15 L6 25 Z"/>
+                        <path fill="#ff9a3c" d="M6 20 L2 17 L2 23 Z" opacity="0.92"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="time-effect">
+            <div class="earth-effect">
+                <p class="effect-label">Earth Twin</p>
+                <div class="rose" id="earthRose">
+                    <div class="rose-stem"></div>
+                    <div class="rose-leaf left"></div>
+                    <div class="rose-leaf right"></div>
+                    <div class="rose-head">
+                        <div class="rose-petal p1"></div>
+                        <div class="rose-petal p2"></div>
+                        <div class="rose-petal p3"></div>
+                        <div class="rose-petal p4"></div>
+                        <div class="rose-petal p5"></div>
+                        <div class="rose-petal p6"></div>
+                        <div class="rose-petal p7"></div>
+                        <div class="rose-center"></div>
+                    </div>
+                    <div class="rose-fallen-petal f1"></div>
+                    <div class="rose-fallen-petal f2"></div>
+                    <div class="rose-fallen-petal f3"></div>
+                </div>
+            </div>
+            <div class="rocket-effect">
+                <p class="effect-label">Rocket Twin</p>
+                <div class="rose" id="rocketRose">
+                    <div class="rose-stem"></div>
+                    <div class="rose-leaf left"></div>
+                    <div class="rose-leaf right"></div>
+                    <div class="rose-head">
+                        <div class="rose-petal p1"></div>
+                        <div class="rose-petal p2"></div>
+                        <div class="rose-petal p3"></div>
+                        <div class="rose-petal p4"></div>
+                        <div class="rose-petal p5"></div>
+                        <div class="rose-petal p6"></div>
+                        <div class="rose-petal p7"></div>
+                        <div class="rose-center"></div>
+                    </div>
+                    <div class="rose-fallen-petal f1"></div>
+                    <div class="rose-fallen-petal f2"></div>
+                    <div class="rose-fallen-petal f3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="graph-card div-1">
+            <p class="graph-card-title">Earth Frame (S) <span class="minkowski-norm" id="normS"></span></p>
+            <canvas class="graph-canvas" id="spacetimeGraph1" width="300" height="195" aria-label="Spacetime diagram in Earth frame S"></canvas>
+        </div>
+        <div class="graph-card div-2">
+            <p class="graph-card-title">Rocket Frame (S&#x2032;) <span class="minkowski-norm" id="normSPrime"></span></p>
+            <canvas class="graph-canvas" id="spacetimeGraph2" width="300" height="195" aria-label="Spacetime diagram in rocket comoving frame S prime"></canvas>
+        </div>
+    </main>
+    <div id="welcome-modal" class="modal-backdrop" hidden aria-modal="true" role="dialog" aria-labelledby="welcome-modal-title">
+        <div class="modal-smoke-trails" aria-hidden="true">
+            <span class="modal-smoke modal-smoke--1"></span>
+            <span class="modal-smoke modal-smoke--2"></span>
+            <span class="modal-smoke modal-smoke--3"></span>
+            <span class="modal-smoke modal-smoke--4"></span>
+            <span class="modal-smoke modal-smoke--5"></span>
+        </div>
+        <div class="modal-panel">
+            <button type="button" class="modal-close-btn" id="welcome-modal-close" aria-label="Close welcome dialog">&times;</button>
+            <h2 id="welcome-modal-title" class="modal-title">Welcome to Time Dilation</h2>
+            <p id="welcome-modal-description" class="modal-description">This is a simulation of time dilation. Use the control panel to start and stop the animation.</p>
+            <a class="modal-kofi-link" href="https://ko-fi.com/novark" target="_blank" rel="noopener noreferrer">☕ Buy me a coffee</a>
+        </div>
+    </div>
+    <footer class="page-footer-hint">
+        <p class="footer-scroll-text">Scroll down for explanation.</p>
+        <button type="button" class="footer-scroll-btn" id="scrollToExplanation" aria-label="Scroll to explanation">
+            <span class="chevron-down" aria-hidden="true"></span>
+        </button>
+    </footer>
+    <section id="explanation" class="explanation-section" tabindex="-1" data-explanation-level="intermediate">
+        <div class="explanation-section-header">
+            <h2 class="explanation-heading josefin-sans-700">Why time dilates</h2>
+            <div class="explanation-difficulty">
+                <label for="difficulty-level" class="control-label explanation-difficulty-label">Comfort level</label>
+                <select id="difficulty-level" class="explanation-difficulty-select" aria-describedby="difficulty-audience-hint">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate" selected>Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+                <p class="explanation-audience-hint dm-serif-text-regular" id="difficulty-audience-hint" role="status"></p>
+            </div>
+        </div>
+
+        <div class="explanation-panel" data-level="beginner" hidden>
+            <div class="explanation-lead-row">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Two pictures, one trip.</strong>
+                    The left graph is from <em>Earth's frame of reference</em>: where things are and when they happen, as if you stayed home. The right graph is the <em>same journey</em> described in the <em>rocket's frame of reference</em>, updated little by little as the ship moves. Same story and same events; only the labels on the axes change.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-beginner-1.png" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                    <img src="../static/img/time-dilation-beginner-2.jpg" alt="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Clocks and speed.</strong>
+                    Special relativity says a clock that moves in a straight line at high speed ticks slower <em>as judged by</em> someone who stays at rest, if you compare how much time passes on each clock between the same start and end events. The graphs plot time (horizontal) against position (vertical): a steeper line means the rocket is covering more distance in the same Earth time, so it is moving faster. The next comfort level names the usual factor <strong>&#x3B3;</strong> (gamma) that quantifies that slowdown between agreed events.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>What &#x2016;s&#x2016; is (informally).</strong>
+                    The number &#x2016;s&#x2016; beside each graph is computed from the rocket&rsquo;s current event as &#x221A;((ct)&#xB2;&nbsp;&minus;&nbsp;x&#xB2;) in that diagram&rsquo;s coordinates. That is the invariant interval from the start of the trip to that event &mdash; the same value every inertial observer would assign to that pair of events. For a <em>steady one-way</em> cruise from rest at the origin, that number <strong>matches the time on the rocket&rsquo;s wristwatch</strong>. After turns or acceleration, the wristwatch can read <em>less</em> than &#x2016;s&#x2016; at reunion (twin effect), while &#x2016;s&#x2016; still measures the straight, inertial &ldquo;shortcut&rdquo; proper time between the same two events. When speed approaches <em>c</em>, &#x2016;s&#x2016; along the rocket path grows more slowly than <strong>Earth-frame time ct</strong> on the left graph (clocks at rest in <em>S</em>) between the same events. 
+                    Textbooks package that comparison in a factor <strong>&#x3B3;</strong> (gamma), used explicitly one comfort level up.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-beginner-3.jpg" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                    <img src="../static/img/time-dilation-5-twin-paradox.jpeg" alt="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>The twin idea.</strong>
+                    If one twin stays home and the other flies away and comes back, the traveler usually ends up younger at the reunion. Roughly: the traveler spends part of the trip at high speed, where each second of their life corresponds to more than a second on Earth. Who accelerates (changes velocity) matters for telling the two stories apart; the animation lets you try one-way and round-trip paths.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>About the second graph (S&#x2032;).</strong>
+                    The rocket-frame diagram is built by updating a Lorentz transformation at every small step along the trip &mdash; still the same events as on the left, just converted into the rocket&rsquo;s frame at each moment. For a steady one-way cruise that matches what textbooks do in one go.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Flat screen, not &ldquo;flat spacetime drawn wrong.&rdquo;</strong>
+                    The graphs are <em>flat pictures</em>: a grid and straight traces only plot numbers as <em>(x, ct)</em> (or primed) from the simulation &mdash; ordinary <em>Euclidean</em> pixel layout. Physical intervals use a <em>minus</em> sign, as in &#x2016;s&#x2016;&nbsp;=&nbsp;&#x221A;((ct)&#xB2;&nbsp;&minus;&nbsp;x&#xB2;); a longer line on the monitor is <strong>not</strong> automatically &ldquo;more invariant time.&rdquo; <em>Flat Minkowski spacetime</em> (no gravity in this special-relativity demo) is a different idea from mistaking the chart for school-compass geometry on paper.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-beginner-4.webp" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced-tight">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    For turnarounds and asymmetric speed profiles the picture is still instructive, but some details (for example Earth appearing to end slightly away from the origin in S&#x2032;) are limitations of that step-by-step construction, not something you would see in a perfect accelerating-frame description.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation-panel" data-level="intermediate">
+            <div class="explanation-lead-row">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Same events, two coordinate charts.</strong>
+                    Graph&nbsp;1 plots each event in Earth-frame coordinates (x, ct). Graph&nbsp;2 plots the <em>same</em> stored events after a Lorentz boost into the rocket&rsquo;s comoving frame (x&prime;, ct&prime;), step by step when speed changes. Think of it as two languages for one worldline history, not two different trips.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Hyperbolic geometry of spacetime.</strong>
+                    In everyday geometry, the distance between two points is d&nbsp;=&nbsp;&#x221A;(x&#xB2;&nbsp;+&nbsp;y&#xB2;). In special relativity the "distance" between two events is the spacetime interval: &#x2016;s&#x2016;&nbsp;=&nbsp;&#x221A;(ct&#xB2;&nbsp;&#x2212;&nbsp;x&#xB2;). Notice the minus sign &#x2014; that is what makes spacetime hyperbolic (Lorentzian) rather than the usual positive-definite (Euclidean) notion of length. This interval is invariant: every observer, no matter their velocity, computes the same &#x2016;s&#x2016; for the same pair of events.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-3.png" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                    <img src="../static/img/time-dilation-2.png" alt="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>What &#x2016;s&#x2016; tells you.</strong>
+                    With <strong>&#x3B2;</strong> for <em>v</em>/<em>c</em> and <strong>&#x3B3;</strong>&nbsp;=&nbsp;1/&#x221A;(1&nbsp;&minus;&nbsp;&#x3B2;&#xB2;) (the Lorentz factor behind the beginner slow-clock paragraph), a rocket moving at constant <strong>&#x3B2;</strong> from the origin has position x&nbsp;=&nbsp;&#x3B2;&#xB7;ct, so &#x2016;s&#x2016;&nbsp;=&nbsp;ct&#xB7;&#x221A;(1&nbsp;&#x2212;&nbsp;&#x3B2;&#xB2;)&nbsp;=&nbsp;ct/&#x3B3;. That equals the rocket&rsquo;s elapsed proper time on that leg, and also equals the proper time of the unique inertial geodesic connecting the origin to that event. The faster it moves, the smaller &#x2016;s&#x2016; becomes relative to ct. At the speed of light (&#x3B2;&nbsp;=&nbsp;1), the interval drops to zero: a photon experiences no proper time at all.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>The twin paradox.</strong>
+                    This is the geometric core of the twin paradox. After a round trip both twins meet at one spacetime event, so the invariant interval &#x2016;s&#x2016; from trip start to that reunion (computed from Earth coordinates, where x&nbsp;&#x2248;&nbsp;0) is a single number for everyone. The <em>traveler&rsquo;s wristwatch</em> (tShip in the legend, accumulated as &#x222B;dt/&#x3B3; along the actual path) reads less than that, because proper time adds up along the worldline you took. A curved or kinked timelike path accumulates less proper time than the straight inertial geodesic between the same two events. In Minkowski geometry that geodesic <em>maximizes</em> proper time &#x2014; the opposite of Euclidean distance, where a straight segment is the <em>shortest</em> path.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-5-twin-paradox.jpeg" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                    <img src="../static/img/time-dilation-4.jpg" alt="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Lorentz coordinates on a Euclidean canvas.</strong>
+                    Same caveat as the beginner &ldquo;flat screen&rdquo; paragraph, in compact form: pixel positions use ordinary flat (Euclidean) distances, while axis labels are Lorentz coordinates. A ruler on the monitor measures screen length, not the invariant interval &#x2014; &#x2016;s&#x2016; always comes from the Minkowski combination (ct)&sup2;&nbsp;&minus;&nbsp;x&sup2; (or the primed version in one global frame), not from how long a line <em>looks</em> in pixels.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Why the rocket worldline can look shorter along ct&prime;.</strong>
+                    Along the rocket in S&prime;, each Earth-frame step satisfies &#x394;x&nbsp;=&nbsp;&#x3B2;&#x394;ct, so &#x394;ct&prime;&nbsp;=&nbsp;&#x394;ct/&#x3B3;: coordinate time in S&prime; advances like proper time for the ship. For Earth at rest in S each step has &#x394;x&nbsp;=&nbsp;0, so under the same boost &#x394;ct&prime;&nbsp;=&nbsp;&#x3B3;&#x394;ct. The red trace need not span the same horizontal extent as the blue one; that is boost mixing and time dilation, not a mistake in the plot.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Note on the Rocket Frame (S&#x2032;) graph.</strong>
+                    The S&#x2032; worldlines are built with an incremental piecewise Lorentz boost: each small time-step &#x394;ct is transformed using the rocket's instantaneous velocity &#x3B2; and the results are accumulated. For constant-speed unidirectional trips every step uses the same &#x3B2;, so this is equivalent to a single exact Lorentz transform and &#x2016;s&#x2032;&#x2016;&nbsp;=&nbsp;&#x2016;s&#x2016;. <strong>Hence, trust Graph&nbsp;1 (S)</strong> and <strong>&#x2016;s&#x2016;</strong> between events for invariants; use <strong>S&#x2032;</strong> as the rocket&rsquo;s Lorentz view when <strong>&#x3B2;</strong> is steady, and treat <strong>S&#x2032;</strong> after turns as qualitative unless you dig into the caveat below.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced-tight">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>How to read the sim after a turnaround.</strong>
+                    Default to <strong>Earth frame (left)</strong>, <strong>&#x2016;s&#x2016;</strong> between events, and <strong>tShip</strong> along the path for elapsed proper time on the rocket; expect coordinate quirks in <strong>S&#x2032;</strong> when <strong>&#x3B2;</strong> changes step to step. For bidirectional trips with asymmetric acceleration (e.g. linear ramp-up outbound, instant reversal inbound), the outbound and return legs apply different &#x3B3;&#x3B2; profiles. As a result Earth's worldline in S&#x2032; may not return to x&#x2032;&nbsp;=&nbsp;0 at the reunion, even though physically the rocket and Earth are co-located again. This is a known artifact of the piecewise method: the transform is <em>path-dependent</em>, so the same reunion event, reached via different worldline histories, maps to different S&#x2032; coordinates. The displayed &#x2016;s&#x2032;&#x2016; may also diverge from &#x2016;s&#x2016; for the same reason.                     A fully correct non-inertial coordinate system (Fermi&ndash;Walker or radar coordinates) would preserve co-location but is substantially more complex to implement.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-6.png" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation-panel" data-level="advanced" hidden>
+            <div class="explanation-lead-row">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                    <img src="../static/img/time-dilation-advanced-1.jpg" alt="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Coordinate charts vs. Euclidean display.</strong>
+                    Each diagram sends an open set of Lorentz coordinates (global S, or piecewise-composed S&prime;) into &#x211D;&sup2; for rendering. That map is smooth for visualization but is <em>not</em> an isometry: the viewer&rsquo;s Euclidean arc length in pixel space does not reproduce proper time or invariant interval. Physical lengths come from the Lorentzian metric on Minkowski space, not from a ruler on the PNG. Graph&nbsp;1 and graph&nbsp;2 are different charts of the same underlying events when the piecewise boost is consistent (e.g. one constant &#x3B2;). <strong>Operationally:</strong> for elapsed times and invariants between events, read <strong>Graph&nbsp;1</strong> and <strong>&#x2016;s&#x2016;</strong>; use <strong>S&#x2032;</strong> as a Lorentz view that agrees with <strong>S</strong> when <strong>&#x3B2;</strong> is constant, and lean on the intermediate caveat when <strong>&#x3B2;</strong> varies along the path.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Metric and invariant interval.</strong>
+                    Minkowski spacetime carries the flat Lorentzian metric with signature choice (+,&minus;) here: the invariant interval between events separated by (&#x394;ct, &#x394;x) is &#x394;s&#xB2;&nbsp;=&nbsp;(&#x394;ct)&#xB2;&nbsp;&#x2212;&nbsp;(&#x394;x)&#xB2; (timelike if positive). Lorentz transformations are isometries of this metric, so a single global inertial frame change leaves &#x2016;s&#x2016; fixed for any <em>pair</em> of events. Proper time along a timelike curve is &#x3C4;&nbsp;=&nbsp;&#x222B;&#x221A;((&#x394;ct)&#xB2;&nbsp;&#x2212;&nbsp;(&#x394;x)&#xB2;) along the curve; for inertial motion this collapses to &#x394;&#x3C4;&nbsp;=&nbsp;&#x394;ct/&#x3B3;.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-2.png" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                    <img src="../static/img/time-dilation-advanced-4.jpg" alt="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Geodesics vs. general worldlines.</strong>
+                    Between two timelike-related events, the unique inertial (unaccelerated) segment maximizes proper time (twin &ldquo;paradox&rdquo;). A piecewise-inertial path with the same endpoints has strictly smaller integrated proper time. Contrast Euclidean distance in the plane: a broken path between two points is usually <em>longer</em> than the straight chord (triangle inequality). For timelike proper time in Minkowski space the inequality flips: the chord (geodesic) is the <em>longest</em> time, not the shortest distance.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Rapidity and boosts.</strong>
+                    Writing &#x3B2;&nbsp;=&nbsp;tanh&#x2009;&#x3C8;, colinear boosts compose by adding rapidity &#x3C8;, whereas spatial rotations compose by adding angle. Non-colinear boosts do not commute; successive boosts can generate a rotation (Thomas precession), which foreshadows why gluing many small boosts along a curved worldline is subtle. This demo still advances each step with instantaneous <strong>&#x3B2;</strong>, not &#x3C8;; rapidity is the language that explains why those small boosts need not piece together into one innocent global <strong>S&#x2032;</strong>.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)">
+                    <img src="../static/img/time-dilation-advanced-2.png" alt="Supporting illustration (right)">
+                </figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)">
+                    <img src="../static/img/time-dilation-advanced-3.png" alt="Supporting illustration (left)">
+                </figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    <strong>Piecewise boosts and S&#x2032; in this demo.</strong>
+                    The S&#x2032; graph integrates incremental boosts on each &#x394;ct using the instantaneous &#x3B2;(t). For one constant &#x3B2; this reproduces one global Lorentz map, so &#x2016;s&#x2032;&#x2016;&nbsp;=&nbsp;&#x2016;s&#x2016; for the endpoint event vector. For varying &#x3B2;, the construction is a sequence of different inertial charts; composing boosts along a non-inertial trajectory is <em>path-dependent</em> and does not generally yield a global inertial frame. Hence reunion need not appear at x&#x2032;&nbsp;=&nbsp;0 and the displayed &#x2016;s&#x2032;&#x2016; can differ from &#x2016;s&#x2016;: cross terms from changing boost from step to step spoil naive interval invariance of the <em>accumulated</em> coordinates.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+            <div class="explanation-lead-row explanation-lead-spaced-tight">
+                <div class="explanation-side explanation-side--left">
+                <figure class="explanation-figure explanation-figure--left" aria-label="Supporting illustration (left)"></figure>
+                </div>
+                <p class="explanation-lead dm-serif-text-regular">
+                    A Fermi&ndash;Walker transported tetrad (or radar/Rindler-type coordinates matched to the actual 4-acceleration) is the sort of upgrade that would remove artifacts such as reunion at <em>x&#x2032;</em>&nbsp;&#x2260;&nbsp;0 in the piecewise <strong>S&#x2032;</strong> picture described in the intermediate caveat &mdash; at the cost of a substantially heavier implementation than this visualization.
+                </p>
+                <div class="explanation-side explanation-side--right">
+                <figure class="explanation-figure explanation-figure--right" aria-label="Supporting illustration (right)"></figure>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

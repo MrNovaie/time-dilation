@@ -1,0 +1,335 @@
+.rocket-stage {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    width: 100%;
+    min-height: 5.5rem;
+    border: 2px solid rgba(140, 220, 255, 0.55);
+    border-radius: 2px;
+    background: rgba(8, 18, 32, 0.45);
+    box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+        0 0 12px rgba(60, 150, 255, 0.12);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.rocket-portal {
+    position: relative;
+    flex-shrink: 0;
+    width: 5.5rem;
+    height: 5.5rem;
+    transform: translateX(-50%);
+    border: 2px solid rgba(160, 230, 255, 0.75);
+    border-radius: 50%;
+    clip-path: inset(0 0 0 50%);
+    overflow: hidden;
+    background-color: #08213d;
+    background-image: url("img/earth.jpg");
+    background-size: auto 100%;
+    background-repeat: repeat-x;
+    background-position: 0 50%;
+    animation: earthSpin 10s linear infinite;
+    will-change: background-position;
+    box-shadow:
+        inset -12px 0 16px rgba(0, 0, 0, 0.45),
+        inset 10px 0 12px rgba(150, 210, 255, 0.2),
+        0 0 12px rgba(100, 200, 255, 0.25);
+}
+.rocket-portal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 24% 28%, rgba(255, 255, 255, 0.28), transparent 36%),
+        radial-gradient(circle at 80% 50%, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.58));
+    pointer-events: none;
+}
+.rocket-portal::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(210, 245, 255, 0.2);
+    pointer-events: none;
+}
+@keyframes earthSpin {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: -177px;
+    }
+}
+.rocket-track {
+    position: relative;
+    flex: 1;
+    align-self: center;
+    min-height: 5.25rem;
+    margin: 0.35rem -2.75rem 0.35rem -2.75rem;
+    border-radius: 1px;
+    overflow: hidden;
+}
+.rocket-ship {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transform-origin: 50% 50%;
+    will-change: transform;
+    filter: drop-shadow(0 0 6px rgba(100, 200, 255, 0.35));
+}
+.earth-effect,
+.rocket-effect {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(140, 220, 255, 0.5);
+    border-radius: 2px;
+    margin: 0.35rem 0;
+    padding: 0.5rem;
+    min-height: 160px;
+    background: rgba(4, 12, 24, 0.55);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.effect-label {
+    margin: 0 0 0.25rem;
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 0.75rem;
+    color: rgba(200, 243, 255, 0.8);
+    text-shadow: 0 0 6px rgba(120, 220, 255, 0.25);
+    letter-spacing: 0.04em;
+}
+
+/* ── Rose container ── */
+.rose {
+    position: relative;
+    width: 80px;
+    height: 130px;
+}
+
+/* ── Stem ── */
+.rose-stem {
+    position: absolute;
+    left: 50%;
+    top: 35px;
+    width: 4px;
+    height: 90px;
+    margin-left: -2px;
+    background: hsl(120, 40%, 28%);
+    border-radius: 2px;
+    transform-origin: top center;
+    animation: stem-bend 1s linear forwards paused;
+}
+
+/* ── Leaves ── */
+.rose-leaf {
+    position: absolute;
+    width: 18px;
+    height: 10px;
+    background: hsl(120, 45%, 30%);
+    border-radius: 50% 50% 50% 0;
+    transform-origin: right center;
+    transform: var(--leaf-base, none);
+    animation: leaf-wilt 1s linear forwards paused;
+}
+.rose-leaf.left {
+    left: 50%;
+    top: 70px;
+    margin-left: -20px;
+    --leaf-base: rotate(20deg);
+}
+.rose-leaf.right {
+    left: 50%;
+    top: 85px;
+    margin-left: 4px;
+    border-radius: 50% 50% 0 50%;
+    transform-origin: left center;
+    --leaf-base: rotate(-20deg) scaleX(-1);
+}
+
+/* ── Flower head ── */
+.rose-head {
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+}
+
+/* ── Petals ── */
+.rose-petal {
+    position: absolute;
+    width: 20px;
+    height: 28px;
+    background: hsl(0, 85%, 45%);
+    border-radius: 50% 50% 45% 45%;
+    left: 50%;
+    top: 50%;
+    margin-left: -10px;
+    margin-top: -22px;
+    transform-origin: center bottom;
+    transform: var(--petal-base-rot, rotate(0deg));
+    animation: petal-wilt 1s linear forwards paused;
+}
+.rose-petal::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: hsl(30, 40%, 25%);
+    top: 40%;
+    left: 35%;
+    opacity: 0;
+    animation: spot-appear 1s linear forwards paused;
+    animation-delay: var(--wilt-delay, 0s);
+}
+.rose-petal.p1 { --petal-base-rot: rotate(0deg); }
+.rose-petal.p2 { --petal-base-rot: rotate(51deg); }
+.rose-petal.p3 { --petal-base-rot: rotate(103deg); }
+.rose-petal.p4 { --petal-base-rot: rotate(154deg); }
+.rose-petal.p5 { --petal-base-rot: rotate(206deg); }
+.rose-petal.p6 { --petal-base-rot: rotate(257deg); }
+.rose-petal.p7 { --petal-base-rot: rotate(309deg); }
+.rose-petal.p2::after { top: 30%; left: 50%; }
+.rose-petal.p3::after { top: 50%; left: 25%; width: 5px; height: 5px; }
+.rose-petal.p4::after { top: 35%; left: 45%; }
+.rose-petal.p5::after { top: 55%; left: 30%; width: 7px; height: 7px; }
+.rose-petal.p6::after { top: 25%; left: 40%; }
+.rose-petal.p7::after { top: 45%; left: 55%; width: 5px; height: 5px; }
+
+/* ── Center (pistil) ── */
+.rose-center {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+    background: hsl(45, 70%, 45%);
+    border-radius: 50%;
+    z-index: 1;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2),
+                0 0 3px rgba(180, 150, 50, 0.3);
+    animation: centre-wilt 1s linear forwards paused;
+}
+.rose-center::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 40% 38%,
+        rgba(255, 255, 255, 0.25) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 60% 65%,
+        rgba(0, 0, 0, 0.15) 0%,
+        transparent 45%
+    );
+    opacity: 0;
+    animation: centre-darken 1s linear forwards paused;
+    animation-delay: var(--wilt-delay, 0s);
+}
+/* ── Fallen petals (hidden initially) ── */
+.rose-fallen-petal {
+    position: absolute;
+    width: 14px;
+    height: 18px;
+    background: hsl(0, 85%, 45%);
+    border-radius: 50% 50% 45% 45%;
+    opacity: 0;
+    animation: petal-fall 1s linear forwards paused;
+}
+.rose-fallen-petal.f1 {
+    left: 15px;
+    top: 40px;
+    --fall-base: rotate(45deg);
+}
+.rose-fallen-petal.f2 {
+    left: 55px;
+    top: 45px;
+    --fall-base: rotate(-30deg);
+}
+.rose-fallen-petal.f3 {
+    left: 35px;
+    top: 35px;
+    --fall-base: rotate(15deg);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Wilting keyframes — all 1s duration, scrubbed via animation-delay in JS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes petal-wilt {
+    0%   { background: hsl(0, 85%, 45%);  transform: var(--petal-base-rot); }
+    20%  { background: hsl(0, 85%, 45%);  transform: var(--petal-base-rot); }
+    40%  { background: hsl(0, 60%, 40%);  transform: var(--petal-base-rot) translateY(-2px); }
+    60%  { background: hsl(15, 40%, 35%); transform: var(--petal-base-rot) translateY(2px) rotate(12deg); }
+    80%  { background: hsl(25, 25%, 30%); transform: var(--petal-base-rot) translateY(6px) rotate(25deg) scaleY(0.85); }
+    100% { background: hsl(30, 10%, 25%); transform: var(--petal-base-rot) translateY(10px) rotate(35deg) scaleY(0.7); }
+}
+
+@keyframes spot-appear {
+    0%   { opacity: 0; }
+    30%  { opacity: 0; }
+    50%  { opacity: 0.2; }
+    70%  { opacity: 0.45; }
+    100% { opacity: 0.7; }
+}
+
+@keyframes stem-bend {
+    0%   { transform: rotate(0deg); background: hsl(120, 40%, 28%); }
+    20%  { transform: rotate(0deg); background: hsl(120, 40%, 28%); }
+    40%  { transform: rotate(5deg); background: hsl(100, 35%, 26%); }
+    60%  { transform: rotate(15deg); background: hsl(80, 25%, 24%); }
+    80%  { transform: rotate(30deg); background: hsl(60, 20%, 22%); }
+    100% { transform: rotate(45deg); background: hsl(45, 15%, 20%); }
+}
+
+@keyframes leaf-wilt {
+    0%   { background: hsl(120, 45%, 30%); transform: var(--leaf-base); }
+    20%  { background: hsl(120, 45%, 30%); transform: var(--leaf-base); }
+    40%  { background: hsl(90, 35%, 30%);  transform: var(--leaf-base) rotate(5deg); }
+    60%  { background: hsl(60, 30%, 28%);  transform: var(--leaf-base) rotate(15deg) scaleY(0.9); }
+    80%  { background: hsl(45, 25%, 25%);  transform: var(--leaf-base) rotate(30deg) scaleY(0.75); }
+    100% { background: hsl(35, 15%, 22%);  transform: var(--leaf-base) rotate(45deg) scaleY(0.5); }
+}
+
+@keyframes petal-fall {
+    0%   { opacity: 0; transform: var(--fall-base) translateY(0);
+           background: hsl(25, 25%, 30%); }
+    75%  { opacity: 0; transform: var(--fall-base) translateY(0);
+           background: hsl(25, 25%, 30%); }
+    85%  { opacity: 0.8; transform: var(--fall-base) translateY(30px) rotate(60deg);
+           background: hsl(30, 15%, 26%); }
+    100% { opacity: 0.5; transform: var(--fall-base) translateY(70px) rotate(90deg);
+           background: hsl(30, 10%, 22%); }
+}
+
+@keyframes centre-wilt {
+    0%   { background: hsl(45, 70%, 45%); transform: scale(1); }
+    20%  { background: hsl(45, 70%, 45%); transform: scale(1); }
+    40%  { background: hsl(45, 50%, 40%); transform: scale(0.95); }
+    60%  { background: hsl(40, 30%, 35%); transform: scale(0.88); }
+    80%  { background: hsl(35, 15%, 28%); transform: scale(0.78); }
+    100% { background: hsl(30, 5%, 22%);  transform: scale(0.65); }
+}
+
+@keyframes centre-darken {
+    0%   { opacity: 0; }
+    30%  { opacity: 0; }
+    50%  { opacity: 0.3; background: radial-gradient(
+               circle at 40% 38%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+           radial-gradient(circle at 60% 65%, rgba(0, 0, 0, 0.25) 0%, transparent 45%); }
+    75%  { opacity: 0.6; }
+    100% { opacity: 0.85; background: radial-gradient(
+               circle at 40% 38%, rgba(0, 0, 0, 0.1) 0%, transparent 40%),
+           radial-gradient(circle at 55% 60%, rgba(0, 0, 0, 0.4) 0%, transparent 50%); }
+}
