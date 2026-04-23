@@ -16,9 +16,25 @@ const rocketShip = document.getElementById("rocketShip");
 const rocketTrack = document.getElementById("rocketTrack");
 const speedSlider = document.getElementById("speed");
 const pathLengthText = document.getElementById("pathLengthText"); 
-const PX_PER_C = 140; // pixels travelled per second at 1.0c
-const PX_PER_C_BI = 140 * 2; // pixels travelled per second at 1.0c for bidirectional mode
+// Baseline at VIEWPORT_REF_WIDTH_PX; narrower viewports scale speeds down (rocket crosses the track slower).
+const VIEWPORT_REF_WIDTH_PX = 1440;
+const BASE_PX_PER_C = 140; // pixels / second at 1.0c at reference width
+const BASE_PX_PER_C_BI = BASE_PX_PER_C * 2;
 const ROSE_DEATH_SLOWDOWN = 9.5; // slowdown factor for the rose death animation
+
+function viewportMotionScale() {
+  const w = typeof window !== "undefined" ? window.innerWidth : VIEWPORT_REF_WIDTH_PX;
+  if (!w || !Number.isFinite(w)) return 1;
+  return Math.max(0.15, Math.min(999, w / VIEWPORT_REF_WIDTH_PX));
+}
+
+function scaledPxPerC() {
+  return BASE_PX_PER_C * viewportMotionScale();
+}
+
+function scaledPxPerCBi() {
+  return BASE_PX_PER_C_BI * viewportMotionScale();
+}
 
 const motionState = {
   // How speed approaches target: snap ("instant") or lerp ("linear").
@@ -212,8 +228,8 @@ function scrubRose(theRoseItself, progress) {
 }
 
 function autoRoseDeathSeconds() {
-  const pxPerC = motionState.pathMode === "bi" ? PX_PER_C_BI : PX_PER_C;
-  const baselineSecondsAtOneC = (2 * pxPerC) / Math.max(1,PX_PER_C);
+  const pxPerC = motionState.pathMode === "bi" ? scaledPxPerCBi() : scaledPxPerC();
+  const baselineSecondsAtOneC = (2 * pxPerC) / Math.max(1, scaledPxPerC());
   return ROSE_DEATH_SLOWDOWN * baselineSecondsAtOneC;
 }
 function speedScaleToBeta(speedScale) {
@@ -249,7 +265,7 @@ function tick(ts) {
   const maxX = maxTravelPx(); // Called again to prevent stale value being used.
   // Convert slider scale (0..10) into pixels/second for stage motion.
   const betaMagnitude = speedScaleToBeta(motionState.displaySpeed);
-  const v = betaMagnitude * PX_PER_C;
+  const v = betaMagnitude * scaledPxPerC();
   const signedBeta = betaMagnitude * motionDirSign();
   const gamma = gammaFromBeta(signedBeta);
 
@@ -296,7 +312,7 @@ function tick(ts) {
       isPlaying,
       speedScale: motionState.displaySpeed,
       dirSign: motionDirSign(),
-      xRocket: motionState.posPx / PX_PER_C,
+      xRocket: motionState.posPx / scaledPxPerC(),
       progress: runProgress(maxX),
       runComplete: roundComplete,
     });

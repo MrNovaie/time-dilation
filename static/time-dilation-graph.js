@@ -47,7 +47,7 @@
 //  The animation stage moves in pixels, but Lorentz mixing of x and ct only
 //  makes sense when both share the same units.  time-dilation.js converts
 //  pixel position to c-normalised units before sending:
-//      x_phys = x_px / PX_PER_C          (PX_PER_C = 140 (arbitrary number))
+//      x_phys = x_px / scaledPxPerC()   (140 px/s at 1c when innerWidth >= 1440; scales down on narrow viewports)
 //  so that  x = β · ct  holds for constant-speed motion (c = 1).
 // ===========================================================================
 
